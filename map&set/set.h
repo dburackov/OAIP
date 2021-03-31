@@ -39,11 +39,12 @@ public:
 	class iterator {
 	private:
 		map<KeyType, char>* metadata;
-		KeyType pointer;
+		node<KeyType, char>* pointer;
 
 	public:
 		iterator() : metadata(nullptr), pointer(0) {};
-		iterator(map<KeyType, char>* metadata, KeyType pointer) : metadata(metadata), pointer(pointer) {};
+		iterator(map<KeyType, char>* metadata, node<KeyType, char>* pointer) : 
+			metadata(metadata), pointer(pointer) {};
 
 		bool operator ==(const iterator& it) {
 			return pointer == it.pointer;
@@ -53,8 +54,8 @@ public:
 			return pointer != it.pointer;
 		}
 
-		KeyType& operator *() {
-			return pointer;
+		KeyType operator *() {
+			return pointer->data.first;
 		}
 
 		iterator& operator =(const iterator& it) {
@@ -88,17 +89,14 @@ public:
 	};
 
 	iterator begin() {
-		KeyType key = (*data.begin()).first;
-		return iterator(&data, key);
+		return iterator(&data, data.begin().getNode());
 	}
 
 	iterator end() {
-		KeyType key = (*data.end()).first;
-		return iterator(&data, key);
+		return iterator(&data, data.end().getNode());
 	}
 
 	iterator find(KeyType request) {
-		KeyType key = (*data.find(request)).first;
-		return iterator(&data, key);
+		return iterator(&data, data.find(request).getNode());
 	}
 };

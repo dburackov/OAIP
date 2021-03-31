@@ -1,40 +1,41 @@
 #pragma once
 
 template<typename KeyType, typename ValueType>
+struct node {
+	std::pair<const KeyType, ValueType> data;
+	node* left;
+	node* right;
+	node* parant;
+
+	node(std::pair<KeyType, ValueType> value) : data(value) {
+		left = right = parant = nullptr;
+	}
+
+	node(std::pair<KeyType, ValueType> value, node* parant) : data(value), parant(parant) {
+		left = right = nullptr;
+	}
+
+	~node() {
+		delete left;
+		delete right;
+	}
+
+	KeyType getKey() {
+		return data.first;
+	}
+};
+
+template<typename KeyType, typename ValueType>
 class map {
-private: 
-	struct node {
-		std::pair<const KeyType, ValueType> data;
-		node* left;
-		node* right;
-		node* parant;
-
-		node(std::pair<KeyType, ValueType> value) : data(value) {
-			left = right = parant = nullptr;
-		}
-
-		node(std::pair<KeyType, ValueType> value, node* parant) : data(value), parant(parant) {
-			left = right = nullptr;
-		}
-
-		~node() {
-			delete left;
-			delete right;
-		}
-
-		KeyType getKey() {
-			return data.first;
-		}
-	};
-
-	node* root;
-	node* beginPointer;
-	node* endPointer;
+private:
+	node<KeyType, ValueType>* root;
+	node<KeyType, ValueType>* beginPointer;
+	node<KeyType, ValueType>* endPointer;
 	size_t mapSize;
 
-	node* next(node* request) {
-		node* current = root;
-		node* result = beginPointer;
+	node<KeyType, ValueType>* next(node<KeyType, ValueType>* request) {
+		node<KeyType, ValueType>* current = root;
+		node<KeyType, ValueType>* result = beginPointer;
 		while (current != nullptr) {
 			if (current->getKey() > request->getKey()) {
 				result = current;
@@ -46,9 +47,9 @@ private:
 		return result;
 	}
 
-	node* prev(node* request) {
-		node* current = root;
-		node* result = endPointer;
+	node<KeyType, ValueType>* prev(node<KeyType, ValueType>* request) {
+		node<KeyType, ValueType>* current = root;
+		node<KeyType, ValueType>* result = endPointer;
 		while (current != nullptr) {
 			if (current->getKey() < request->getKey()) {
 				result = current;
@@ -71,8 +72,8 @@ public:
 	}
 
 	void insert(std::pair<KeyType, ValueType> newNode) {
-		node* current = root;
-		node* previous = nullptr;
+		node<KeyType, ValueType>* current = root;
+		node<KeyType, ValueType>* previous = nullptr;
 		while (current != nullptr) {
 			previous = current;
 			if (current->getKey() < newNode.first) {
@@ -84,15 +85,15 @@ public:
 			}
 		}
 		if (previous == nullptr) {
-			root = new node(newNode);
+			root = new node<KeyType, ValueType>(newNode);
 			beginPointer = endPointer = root;
 		} else if (previous->getKey() < newNode.first) {
-			previous->right = new node(newNode, previous);
+			previous->right = new node<KeyType, ValueType>(newNode, previous);
 			if (previous == endPointer) {
 				endPointer = previous->right;
 			}
 		} else {
-			previous->left = new node(newNode, previous);
+			previous->left = new node<KeyType, ValueType>(newNode, previous);
 			if (previous == beginPointer) {
 				beginPointer = previous->left;
 			}
@@ -101,9 +102,9 @@ public:
 	}
 
 	void erase(KeyType key) {
-		node* current = root;
-		node* replacement = nullptr;
-		node* child = nullptr;
+		node<KeyType, ValueType>* current = root;
+		node<KeyType, ValueType>* replacement = nullptr;
+		node<KeyType, ValueType>* child = nullptr;
 		while (current != nullptr && current->getKey() != key) {
 			if (current->getKey() < key) {
 				current = current->right;
@@ -182,11 +183,11 @@ public:
 	class iterator {
 	private:
 		map* metadata;
-		node* pointer;
+		node<KeyType, ValueType>* pointer;
 
 	public:
 		iterator() : metadata(nullptr), pointer(nullptr) {};
-		iterator(map* metadata, node* pointer) : metadata(metadata), pointer(pointer) {};
+		iterator(map* metadata, node<KeyType, ValueType>* pointer) : metadata(metadata), pointer(pointer) {};
 		
 		bool operator ==(const iterator& it) {
 			return pointer == it.pointer;
@@ -227,6 +228,10 @@ public:
 			pointer = metadata->prev(pointer);
 			return temp;
 		}
+
+		node<KeyType, ValueType>* getNode() {
+			return pointer;
+		}
 	};
 
 	iterator begin() {
@@ -238,8 +243,8 @@ public:
 	}
 
 	iterator find(KeyType key) {
-		node* current = root;
-		node* result = endPointer;
+		node<KeyType, ValueType>* current = root;
+		node<KeyType, ValueType>* result = endPointer;
 		while (current != nullptr) {
 			if (current->getKey() < key) {
 				current = current->right;
@@ -264,33 +269,5 @@ public:
 			}
 		}
 		return current->data.second;
-	}
-
-	KeyType next(KeyType key) {
-		node* current = root;
-		KeyType result = beginPointer->getKey();
-		while (current != nullptr) {
-			if (current->getKey() > key) {
-				result = current->getKey();
-				current = current->left;
-			} else {
-				current = current->right;
-			}
-		}
-		return result;
-	}
-
-	KeyType prev(KeyType key) {
-		node* current = root;
-		KeyType result = endPointer->getKey();
-		while (current != nullptr) {
-			if (current->getKey() < key) {
-				result = current->getKey();
-				current = current->right;
-			} else {
-				current = current->left;
-			}
-		}
-		return result;
 	}
 };
