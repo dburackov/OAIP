@@ -33,34 +33,6 @@ private:
 	node<KeyType, ValueType>* endPointer;
 	size_t mapSize;
 
-	node<KeyType, ValueType>* next(node<KeyType, ValueType>* request) {
-		node<KeyType, ValueType>* current = root;
-		node<KeyType, ValueType>* result = beginPointer;
-		while (current != nullptr) {
-			if (current->getKey() > request->getKey()) {
-				result = current;
-				current = current->left;
-			} else {
-				current = current->right;
-			}
-		}
-		return result;
-	}
-
-	node<KeyType, ValueType>* prev(node<KeyType, ValueType>* request) {
-		node<KeyType, ValueType>* current = root;
-		node<KeyType, ValueType>* result = endPointer;
-		while (current != nullptr) {
-			if (current->getKey() < request->getKey()) {
-				result = current;
-				current = current->right;
-			} else {
-				current = current->left;
-			}
-		}
-		return result;
-	}
-
 public:
 	map() {
 		root = beginPointer = endPointer = nullptr;
@@ -269,5 +241,35 @@ public:
 			}
 		}
 		return current->data.second;
+	}
+
+	node<KeyType, ValueType>* next(node<KeyType, ValueType>* request) {
+		node<KeyType, ValueType>* current = root;
+		node<KeyType, ValueType>* result = beginPointer;
+		while (current != nullptr) {
+			if (current->getKey() > request->getKey()) {
+				result = current;
+				current = current->left;
+			}
+			else {
+				current = current->right;
+			}
+		}
+		return result;
+	}
+
+	node<KeyType, ValueType>* prev(node<KeyType, ValueType>* request) {
+		node<KeyType, ValueType>* current = root;
+		node<KeyType, ValueType>* result = endPointer;
+		while (current != nullptr) {
+			if (current->getKey() < request->getKey()) {
+				result = current;
+				current = current->right;
+			}
+			else {
+				current = current->left;
+			}
+		}
+		return result;
 	}
 };
