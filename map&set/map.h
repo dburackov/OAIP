@@ -230,11 +230,11 @@ public:
 	};
 
 	iterator begin() {
-		return *new iterator(this, beginPointer);
+		return iterator(this, beginPointer);
 	}
 
 	iterator end() {
-		return *new iterator(this, endPointer);
+		return iterator(this, endPointer);
 	}
 
 	iterator find(KeyType key) {
@@ -250,7 +250,7 @@ public:
 				break;
 			}
 		}
-		return *new iterator(this, result);
+		return iterator(this, result);
 	}
 
 	ValueType& operator [](KeyType key) {

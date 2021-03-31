@@ -89,16 +89,16 @@ public:
 
 	iterator begin() {
 		KeyType key = (*data.begin()).first;
-		return *new iterator(&data, key);
+		return iterator(&data, key);
 	}
 
 	iterator end() {
 		KeyType key = (*data.end()).first;
-		return *new iterator(&data, key);
+		return iterator(&data, key);
 	}
 
 	iterator find(KeyType request) {
 		KeyType key = (*data.find(request)).first;
-		return *new iterator(&data, key);
+		return iterator(&data, key);
 	}
 };
