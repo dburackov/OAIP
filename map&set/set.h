@@ -42,7 +42,7 @@ public:
 		node<KeyType, char>* pointer;
 
 	public:
-		iterator() : metadata(nullptr), pointer(0) {};
+		iterator() : metadata(nullptr), pointer(nullptr) {};
 		iterator(map<KeyType, char>* metadata, node<KeyType, char>* pointer) : 
 			metadata(metadata), pointer(pointer) {};
 
