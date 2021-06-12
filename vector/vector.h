@@ -122,9 +122,7 @@ public:
 
 		iterator(const iterator& it) : ptr(it.ptr) {} 
 
-		~iterator() {
-			delete ptr;
-		}
+		~iterator() {}
 
 		iterator& operator=(const iterator& it) {
 			ptr = it.ptr;
