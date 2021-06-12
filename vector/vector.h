@@ -116,11 +116,11 @@ public:
 	private:
 		T* ptr;
 	public:
-		iterator() : ptr(nullptr) {};
+		iterator() : ptr(nullptr) {}
 
-		iterator(T* ptr) : ptr(ptr) {} ;
+		iterator(T* ptr) : ptr(ptr) {} 
 
-		iterator(const iterator& it) : ptr(it.ptr) {} ;
+		iterator(const iterator& it) : ptr(it.ptr) {} 
 
 		~iterator() {
 			delete ptr;
